@@ -1,8 +1,6 @@
 package net.teerapap.whatnext;
 
 import android.app.Activity;
-import android.app.SearchManager;
-import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
@@ -15,10 +13,8 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.Toast;
 
-public class MainActivity extends Activity implements ListView.OnItemClickListener {
-
+public class MainActivity extends Activity {
 
     private String[] mMenuItems;
     private DrawerLayout mDrawerLayout;
@@ -39,7 +35,12 @@ public class MainActivity extends Activity implements ListView.OnItemClickListen
         // set up the drawer's list view with items and click listener
         mDrawerList.setAdapter(new ArrayAdapter<String>(this,
                 R.layout.drawer_list_item, mMenuItems));
-        mDrawerList.setOnItemClickListener(this);
+        mDrawerList.setOnItemClickListener(new ListView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                mDrawerLayout.closeDrawer(mDrawerList);
+            }
+        });
 
         // enable ActionBar app icon to behave as action to toggle nav drawer
         getActionBar().setDisplayHomeAsUpEnabled(true);
@@ -102,8 +103,4 @@ public class MainActivity extends Activity implements ListView.OnItemClickListen
         }
     }
 
-    @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-    }
 }
