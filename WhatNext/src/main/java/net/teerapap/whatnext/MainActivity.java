@@ -1,6 +1,8 @@
 package net.teerapap.whatnext;
 
 import android.app.Activity;
+import android.app.Fragment;
+import android.app.FragmentManager;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
@@ -21,6 +23,9 @@ public class MainActivity extends Activity {
     private ListView mDrawerList;
     private ActionBarDrawerToggle mDrawerToggle;
 
+    private WhatNextFragment whatNextFragment;
+    private DoneFragment doneFragment;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,6 +43,7 @@ public class MainActivity extends Activity {
         mDrawerList.setOnItemClickListener(new ListView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                openMenu(position);
                 mDrawerLayout.closeDrawer(mDrawerList);
             }
         });
@@ -52,13 +58,19 @@ public class MainActivity extends Activity {
                 this,                  /* host Activity */
                 mDrawerLayout,         /* DrawerLayout object */
                 R.drawable.ic_drawer,  /* nav drawer image to replace 'Up' caret */
-                R.string.drawer_open,  /* "open drawer" description for accessibility */
-                R.string.drawer_close  /* "close drawer" description for accessibility */
+                R.string.drawer_open,  /* description for accessibility */
+                R.string.drawer_close  /* description for accessibility */
         );
         mDrawerLayout.setDrawerListener(mDrawerToggle);
 
+        // Create static fragment
+        // TODO: Use static initializer instead
+        whatNextFragment = new WhatNextFragment();
+        doneFragment = new DoneFragment();
+
         if (savedInstanceState == null) {
             mDrawerList.setItemChecked(0, true);
+            openMenu(0);
         }
     }
 
@@ -101,6 +113,30 @@ public class MainActivity extends Activity {
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    /**
+     * Open menu at position.
+     * @param position
+     */
+    public void openMenu(int position) {
+        // update the main content by replacing fragments
+        Fragment fragment;
+
+        switch (position) {
+            case 0:
+                fragment = this.whatNextFragment;
+                break;
+            case 1:
+                fragment = this.doneFragment;
+                break;
+            default:
+                return;
+        }
+
+        // Replace current fragment
+        FragmentManager fragmentManager = getFragmentManager();
+        fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
     }
 
 }
