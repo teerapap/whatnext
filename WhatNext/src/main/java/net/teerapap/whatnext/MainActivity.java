@@ -64,9 +64,8 @@ public class MainActivity extends Activity {
         mDrawerLayout.setDrawerListener(mDrawerToggle);
 
         // Create static fragment
-        // TODO: Use static initializer instead
-        whatNextFragment = new WhatNextFragment();
-        doneFragment = new DoneFragment();
+        whatNextFragment = WhatNextFragment.newInstance();
+        doneFragment = DoneFragment.newInstance();
 
         if (savedInstanceState == null) {
             mDrawerList.setItemChecked(0, true);

@@ -10,6 +10,15 @@ import android.widget.ArrayAdapter;
  */
 public class DoneFragment extends ListFragment {
 
+    /**
+     * Static method to initialize the fragment
+     * @return
+     */
+    public static DoneFragment newInstance() {
+        DoneFragment f = new DoneFragment();
+        return f;
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

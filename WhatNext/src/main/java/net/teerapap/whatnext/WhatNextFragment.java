@@ -12,6 +12,15 @@ import android.view.ViewGroup;
  */
 public class WhatNextFragment extends Fragment {
 
+    /**
+     * Static method to initialize the fragment
+     * @return
+     */
+    public static WhatNextFragment newInstance() {
+        WhatNextFragment f = new WhatNextFragment();
+        return f;
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
