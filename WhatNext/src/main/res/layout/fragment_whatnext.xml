@@ -3,103 +3,118 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:padding="10dp">
 
     <TextView
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="0dp"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="Read Born to Run"
-        android:id="@+id/taskName"
+        android:id="@+id/task_title"
         android:gravity="center"
-        android:layout_weight="5"></TextView>
+        android:layout_weight="4" />
 
     <LinearLayout
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="3">
+        android:layout_weight="1">
 
-        <Button
+        <TextView
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Hold"
-            android:id="@+id/holdBtn" />
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Done"
-            android:id="@+id/doneBtn" />
-
-        <Button
-            android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="Next"
-            android:id="@+id/nextBtn" />
+            android:text="2 days ago >>"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:id="@+id/last_done_time"
+            android:gravity="center_vertical" />
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="Buy a milk"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:id="@+id/last_done_task_title"
+            android:gravity="center_vertical" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="actions"
+            android:id="@+id/hold_btn" />
 
     </LinearLayout>
 
-    <TableLayout
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="2.5"
+        android:layout_marginBottom="10dp">
+
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="2"
+            android:text="Done"
+            android:id="@+id/done_btn" />
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="4"
+            android:text="Next"
+            android:id="@+id/next_btn" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ToggleButton
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textOn="@string/when_home"
+            android:textOff="@string/when_home"
+            android:id="@+id/when_home_toggle" />
+
+        <ToggleButton
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textOn="@string/when_work"
+            android:textOff="@string/when_work"
+            android:id="@+id/when_work_toggle" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ToggleButton
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textOn="@string/when_free"
+            android:textOff="@string/when_free"
+            android:id="@+id/when_free_toggle" />
+
+        <ToggleButton
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textOn="@string/when_shopping"
+            android:textOff="@string/when_shopping"
+            android:id="@+id/when_shopping_toggle" />
+
+    </LinearLayout>
+
+    <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="10dp">
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <ToggleButton
-                android:layout_weight="1"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:textOn="@string/when_home"
-                android:textOff="@string/when_home"
-                android:id="@+id/when_home_toggle" />
-
-            <ToggleButton
-                android:layout_weight="1"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:textOn="@string/when_work"
-                android:textOff="@string/when_work"
-                android:id="@+id/when_work_toggle" />
-        </TableRow>
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <ToggleButton
-                android:layout_weight="1"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:textOn="@string/when_free"
-                android:textOff="@string/when_free"
-                android:id="@+id/when_free_toggle" />
-
-            <ToggleButton
-                android:layout_weight="1"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:textOn="@string/when_shopping"
-                android:textOff="@string/when_shopping"
-                android:id="@+id/when_shopping_toggle" />
-
-        </TableRow>
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <Button
-                android:layout_weight="1"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:text="Clear"
-                android:id="@+id/button" />
-        </TableRow>
-
-
-    </TableLayout>
+        android:text="Clear"
+        android:id="@+id/clear_btn" />
 
 </LinearLayout>
