@@ -3,6 +3,7 @@ package net.teerapap.whatnext;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
@@ -107,7 +108,11 @@ public class MainActivity extends Activity {
         }
         // Handle action buttons
         switch(item.getItemId()) {
-            case R.id.action_add:
+            case R.id.action_new_task:
+                // Start new tasks activity
+                Intent intent = new Intent(this, NewTaskActivity.class);
+                startActivity(intent);
+                overridePendingTransition(R.anim.abc_fade_in, R.anim.abc_fade_out);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

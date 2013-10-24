@@ -2,19 +2,23 @@
 <resources>
 
     <string name="app_name">WhatNext</string>
-    <string name="action_add">Add new tasks</string>
+    <string name="action_new_task">New Tasks</string>
     <string name="drawer_open">Open drawer</string>
     <string name="drawer_close">Close drawer</string>
     <string name="when_home">Home</string>
     <string name="when_free">Free</string>
     <string name="when_work">Work</string>
     <string name="when_shopping">Shopping</string>
-
     <string name="whatnext_title">What Next</string>
     <string name="done_title">Done</string>
+
     <string-array name="menu_items">
         <item>@string/whatnext_title</item>
         <item>@string/done_title</item>
     </string-array>
+
+    <string name="task_title_label">Title</string>
+    <string name="task_when_label">When</string>
+    <string name="add_task_btn">Add task</string>
 
 </resources>
