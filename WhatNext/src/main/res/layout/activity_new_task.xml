@@ -17,7 +17,7 @@
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:inputType="textAutoCorrect"
+        android:inputType="textAutoCorrect|textCapSentences"
         android:ems="10"
         android:maxLength="100"
         android:id="@+id/task_title_edit"
