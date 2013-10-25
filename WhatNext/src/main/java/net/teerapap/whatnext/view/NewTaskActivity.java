@@ -1,10 +1,12 @@
-package net.teerapap.whatnext;
+package net.teerapap.whatnext.view;
 
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+
+import net.teerapap.whatnext.R;
 
 public class NewTaskActivity extends Activity {
 

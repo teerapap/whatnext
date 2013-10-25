@@ -1,4 +1,4 @@
-package net.teerapap.whatnext;
+package net.teerapap.whatnext.view;
 
 import android.app.ListFragment;
 import android.os.Bundle;

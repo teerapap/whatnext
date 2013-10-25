@@ -1,4 +1,4 @@
-package net.teerapap.whatnext;
+package net.teerapap.whatnext.view;
 
 import android.app.Activity;
 import android.app.Fragment;
@@ -16,6 +16,8 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+
+import net.teerapap.whatnext.R;
 
 public class MainActivity extends Activity {
 
