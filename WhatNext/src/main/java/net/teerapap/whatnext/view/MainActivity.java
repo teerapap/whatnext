@@ -26,8 +26,8 @@ public class MainActivity extends Activity {
     private ListView mDrawerList;
     private ActionBarDrawerToggle mDrawerToggle;
 
-    private WhatNextFragment whatNextFragment;
-    private DoneFragment doneFragment;
+    private WhatNextFragment mWhatNextFragment;
+    private DoneFragment mDoneFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,8 +67,8 @@ public class MainActivity extends Activity {
         mDrawerLayout.setDrawerListener(mDrawerToggle);
 
         // Create static fragment
-        whatNextFragment = WhatNextFragment.newInstance();
-        doneFragment = DoneFragment.newInstance();
+        mWhatNextFragment = WhatNextFragment.newInstance();
+        mDoneFragment = DoneFragment.newInstance();
 
         if (savedInstanceState == null) {
             mDrawerList.setItemChecked(0, true);
@@ -131,10 +131,10 @@ public class MainActivity extends Activity {
 
         switch (position) {
             case 0:
-                fragment = this.whatNextFragment;
+                fragment = this.mWhatNextFragment;
                 break;
             case 1:
-                fragment = this.doneFragment;
+                fragment = this.mDoneFragment;
                 break;
             default:
                 return;
