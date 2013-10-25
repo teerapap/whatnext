@@ -12,6 +12,7 @@ public class DoneFragment extends ListFragment {
 
     /**
      * Static method to initialize the fragment
+     *
      * @return
      */
     public static DoneFragment newInstance() {
@@ -25,7 +26,7 @@ public class DoneFragment extends ListFragment {
 
         // TODO: Read done list from database
         this.setListAdapter(new ArrayAdapter<String>(getActivity(),
-                android.R.layout.simple_list_item_1, new String[] {}));
+                android.R.layout.simple_list_item_1, new String[]{}));
     }
 
     @Override

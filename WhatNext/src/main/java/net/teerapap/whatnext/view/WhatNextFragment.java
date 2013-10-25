@@ -43,6 +43,7 @@ public class WhatNextFragment extends Fragment implements NextTaskListener {
 
     /**
      * Static method to initialize the fragment
+     *
      * @return
      */
     public static WhatNextFragment newInstance() {

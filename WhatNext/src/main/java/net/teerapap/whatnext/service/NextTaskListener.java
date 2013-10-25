@@ -10,12 +10,14 @@ public interface NextTaskListener {
 
     /**
      * Get called when found next task.
+     *
      * @param task
      */
     void onNextTask(Task task);
 
     /**
      * Get called when encounter an error.
+     *
      * @param error
      */
     void onError(Error error);

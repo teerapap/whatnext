@@ -38,6 +38,7 @@ public class TaskService {
 
     /**
      * Saves new task.
+     *
      * @param task
      */
     public void addTask(Task task) {

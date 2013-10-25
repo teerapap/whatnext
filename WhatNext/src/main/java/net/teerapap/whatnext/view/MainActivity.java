@@ -109,7 +109,7 @@ public class MainActivity extends Activity {
             return true;
         }
         // Handle action buttons
-        switch(item.getItemId()) {
+        switch (item.getItemId()) {
             case R.id.action_new_task:
                 // Start new tasks activity
                 Intent intent = new Intent(this, NewTaskActivity.class);
@@ -123,6 +123,7 @@ public class MainActivity extends Activity {
 
     /**
      * Open menu at position.
+     *
      * @param position
      */
     public void openMenu(int position) {

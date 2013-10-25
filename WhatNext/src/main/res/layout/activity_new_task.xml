@@ -1,18 +1,18 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    tools:context=".net.teerapap.whatnext.view.NewTaskActivity">
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingLeft="@dimen/activity_horizontal_margin"
+                android:paddingRight="@dimen/activity_horizontal_margin"
+                android:paddingTop="@dimen/activity_vertical_margin"
+                android:paddingBottom="@dimen/activity_vertical_margin"
+                tools:context=".net.teerapap.whatnext.view.NewTaskActivity">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/task_title_label"
-        android:id="@+id/task_title_label" />
+        android:id="@+id/task_title_label"/>
 
     <EditText
         android:layout_width="match_parent"
@@ -22,7 +22,7 @@
         android:maxLength="100"
         android:id="@+id/task_title_edit"
         android:layout_below="@id/task_title_label"
-        android:layout_alignLeft="@id/task_title_label" />
+        android:layout_alignLeft="@id/task_title_label"/>
 
     <TextView
         android:layout_width="wrap_content"
@@ -44,7 +44,7 @@
             android:layout_weight="1"
             android:textOn="@string/when_home"
             android:textOff="@string/when_home"
-            android:id="@+id/when_home_toggle" />
+            android:id="@+id/when_home_toggle"/>
 
         <ToggleButton
             android:layout_width="0dp"
@@ -52,7 +52,7 @@
             android:layout_weight="1"
             android:textOn="@string/when_work"
             android:textOff="@string/when_work"
-            android:id="@+id/when_work_toggle" />
+            android:id="@+id/when_work_toggle"/>
 
     </LinearLayout>
 
@@ -68,7 +68,7 @@
             android:layout_weight="1"
             android:textOn="@string/when_free"
             android:textOff="@string/when_free"
-            android:id="@+id/when_free_toggle" />
+            android:id="@+id/when_free_toggle"/>
 
         <ToggleButton
             android:layout_width="0dp"
@@ -76,7 +76,7 @@
             android:layout_weight="1"
             android:textOn="@string/when_shopping"
             android:textOff="@string/when_shopping"
-            android:id="@+id/when_shopping_toggle" />
+            android:id="@+id/when_shopping_toggle"/>
 
     </LinearLayout>
 
@@ -87,7 +87,7 @@
         android:id="@+id/add_task_btn"
         android:layout_below="@+id/when_free_shopping_layout"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true" />
+        android:layout_alignParentRight="true"/>
 
 
 </RelativeLayout>
