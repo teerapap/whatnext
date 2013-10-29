@@ -10,7 +10,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.ToggleButton;
 
 import net.teerapap.whatnext.R;
 import net.teerapap.whatnext.model.Task;
@@ -29,11 +28,7 @@ public class WhatNextFragment extends Fragment implements NextTaskListener {
     private Button mClearBtn;
     private Button mNextTaskBtn;
     private TextView mTaskTitleText;
-    // TODO: Refactor this toggle buttons to a class.
-    private ToggleButton mWhenHomeToggleBtn;
-    private ToggleButton mWhenFreeToggleBtn;
-    private ToggleButton mWhenWorkToggleBtn;
-    private ToggleButton mWhenShoppingToggleBtn;
+    private WhenConditionViewGroup mWhenCondViewGroup;
 
     private TaskService mTaskService;
 
@@ -70,13 +65,10 @@ public class WhatNextFragment extends Fragment implements NextTaskListener {
      */
     private void initMemberViews() {
         Activity activity = getActivity();
-        mClearBtn = (Button) activity.findViewById(R.id.clear_btn);
         mNextTaskBtn = (Button) activity.findViewById(R.id.next_btn);
         mTaskTitleText = (TextView) activity.findViewById(R.id.task_title);
-        mWhenHomeToggleBtn = (ToggleButton) activity.findViewById(R.id.when_home_toggle);
-        mWhenFreeToggleBtn = (ToggleButton) activity.findViewById(R.id.when_free_toggle);
-        mWhenWorkToggleBtn = (ToggleButton) activity.findViewById(R.id.when_work_toggle);
-        mWhenShoppingToggleBtn = (ToggleButton) activity.findViewById(R.id.when_shopping_toggle);
+        mWhenCondViewGroup = new WhenConditionViewGroup(activity);
+        mClearBtn = (Button) activity.findViewById(R.id.clear_btn);
     }
 
     /**
@@ -89,7 +81,7 @@ public class WhatNextFragment extends Fragment implements NextTaskListener {
         mClearBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                resetWhenToggleBtns();
+                mWhenCondViewGroup.resetToggleButtons();
             }
         });
         mNextTaskBtn.setOnClickListener(new View.OnClickListener() {
@@ -98,27 +90,13 @@ public class WhatNextFragment extends Fragment implements NextTaskListener {
                 nextTask();
             }
         });
-
     }
 
-    /**
-     * Reset when toggle buttons
-     */
-    public void resetWhenToggleBtns() {
-        mWhenHomeToggleBtn.setChecked(false);
-        mWhenFreeToggleBtn.setChecked(false);
-        mWhenWorkToggleBtn.setChecked(false);
-        mWhenShoppingToggleBtn.setChecked(false);
-    }
+
 
     private void nextTask() {
-
         // Construct when condition
-        WhenCondition when = new WhenCondition()
-                .atHome(mWhenHomeToggleBtn.isChecked())
-                .freeTime(mWhenFreeToggleBtn.isChecked())
-                .atWork(mWhenWorkToggleBtn.isChecked())
-                .shopping(mWhenShoppingToggleBtn.isChecked());
+        WhenCondition when = mWhenCondViewGroup.getCondition();
 
         // Request for next task
         mTaskService.requestNextTask(when);

@@ -18,10 +18,7 @@ import net.teerapap.whatnext.service.TaskService;
 public class NewTaskActivity extends Activity {
 
     private EditText mTaskTitleEdit;
-    private ToggleButton mWhenHomeToggleBtn;
-    private ToggleButton mWhenFreeToggleBtn;
-    private ToggleButton mWhenWorkToggleBtn;
-    private ToggleButton mWhenShoppingToggleBtn;
+    private WhenConditionViewGroup mWhenCondViewGroup;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,10 +28,7 @@ public class NewTaskActivity extends Activity {
         setupActionBar();
 
         mTaskTitleEdit = (EditText) findViewById(R.id.task_title_edit);
-        mWhenHomeToggleBtn = (ToggleButton) findViewById(R.id.when_home_toggle);
-        mWhenFreeToggleBtn = (ToggleButton) findViewById(R.id.when_free_toggle);
-        mWhenWorkToggleBtn = (ToggleButton) findViewById(R.id.when_work_toggle);
-        mWhenShoppingToggleBtn = (ToggleButton) findViewById(R.id.when_shopping_toggle);
+        mWhenCondViewGroup = new WhenConditionViewGroup(this);
 
         // When click add new task button
         Button addNewTaskBtn = (Button) findViewById(R.id.add_task_btn);
@@ -82,11 +76,7 @@ public class NewTaskActivity extends Activity {
         }
 
         // Construct Task object
-        WhenCondition when = new WhenCondition()
-                .atHome(mWhenHomeToggleBtn.isChecked())
-                .freeTime(mWhenFreeToggleBtn.isChecked())
-                .atWork(mWhenWorkToggleBtn.isChecked())
-                .shopping(mWhenShoppingToggleBtn.isChecked());
+        WhenCondition when = mWhenCondViewGroup.getCondition();
         Task task = new Task(title, when);
 
         // Add task to TaskService
