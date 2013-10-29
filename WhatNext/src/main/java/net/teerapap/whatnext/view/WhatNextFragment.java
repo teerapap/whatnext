@@ -24,7 +24,7 @@ import net.teerapap.whatnext.service.TaskService;
  */
 public class WhatNextFragment extends Fragment implements NextTaskListener {
 
-    private static String TAG = "WhatnNextFragment";
+    private static String TAG = "WhatNextFragment";
 
     private Button mClearBtn;
     private Button mNextTaskBtn;
