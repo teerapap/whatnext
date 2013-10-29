@@ -8,13 +8,13 @@ import net.teerapap.whatnext.model.WhenCondition;
 
 /**
  * It wraps the behaviors of when condition views to be reused in many activities and fragments.
- *
+ * <p/>
  * Current views must be 4 ToggleButtons with these id.
  * * R.id.when_home_toggle
  * * R.id.when_free_toggle
  * * R.id.when_work_toggle
  * * R.id.when_shopping_toggle
- *
+ * <p/>
  * Created by teerapap on 10/29/13.
  */
 public class WhenConditionViewGroup {
@@ -43,6 +43,7 @@ public class WhenConditionViewGroup {
 
     /**
      * Get current when condition from the toggle buttons
+     *
      * @return
      */
     public WhenCondition getCondition() {

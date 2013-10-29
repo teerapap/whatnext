@@ -8,7 +8,6 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
-import android.widget.ToggleButton;
 
 import net.teerapap.whatnext.R;
 import net.teerapap.whatnext.model.Task;
@@ -80,7 +79,7 @@ public class NewTaskActivity extends Activity {
         Task task = new Task(title, when);
 
         // Add task to TaskService
-        TaskService.getInstance().addTask(task);
+        TaskService.getInstance(getApplicationContext()).addTask(task);
 
         // Clear text box
         clearTitleEditText();

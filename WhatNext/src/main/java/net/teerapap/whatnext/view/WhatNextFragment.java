@@ -32,10 +32,6 @@ public class WhatNextFragment extends Fragment implements NextTaskListener {
 
     private TaskService mTaskService;
 
-    public WhatNextFragment() {
-        mTaskService = TaskService.getInstance();
-    }
-
     /**
      * Static method to initialize the fragment
      *
@@ -49,6 +45,10 @@ public class WhatNextFragment extends Fragment implements NextTaskListener {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+
+        // Initialize TaskService
+        mTaskService = TaskService.getInstance(getActivity().getApplicationContext());
+
         initMemberViews();
         setUpEventListeners();
     }
@@ -91,7 +91,6 @@ public class WhatNextFragment extends Fragment implements NextTaskListener {
             }
         });
     }
-
 
 
     private void nextTask() {

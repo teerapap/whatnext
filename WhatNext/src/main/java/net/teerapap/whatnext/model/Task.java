@@ -6,12 +6,21 @@ package net.teerapap.whatnext.model;
  */
 public class Task implements When {
 
+    private long mId;
     private String mTitle;
     private When mWhen;
 
     public Task(String title, When condition) {
         mTitle = title;
         mWhen = condition;
+    }
+
+    public long getId() {
+        return mId;
+    }
+
+    public void setId(long id) {
+        mId = id;
     }
 
     public String getTitle() {
