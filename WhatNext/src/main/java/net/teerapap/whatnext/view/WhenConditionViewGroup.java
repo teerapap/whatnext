@@ -1,6 +1,7 @@
 package net.teerapap.whatnext.view;
 
 import android.app.Activity;
+import android.widget.CompoundButton;
 import android.widget.ToggleButton;
 
 import net.teerapap.whatnext.R;
@@ -18,6 +19,10 @@ import net.teerapap.whatnext.model.WhenCondition;
  * Created by teerapap on 10/29/13.
  */
 public class WhenConditionViewGroup {
+
+    public static interface OnConditionChangeListener {
+        void onConditionChanged(WhenCondition currentCondition);
+    }
 
     private ToggleButton mWhenHomeToggleBtn;
     private ToggleButton mWhenFreeToggleBtn;
@@ -39,6 +44,24 @@ public class WhenConditionViewGroup {
         mWhenFreeToggleBtn.setChecked(false);
         mWhenWorkToggleBtn.setChecked(false);
         mWhenShoppingToggleBtn.setChecked(false);
+    }
+
+    /**
+     * Register a callback to be invoked when the condition changed.
+     * @param listener
+     */
+    public void onConditionChanged(final OnConditionChangeListener listener) {
+        CompoundButton.OnCheckedChangeListener checkedListener = new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                listener.onConditionChanged(getCondition());
+            }
+        };
+
+        mWhenHomeToggleBtn.setOnCheckedChangeListener(checkedListener);
+        mWhenFreeToggleBtn.setOnCheckedChangeListener(checkedListener);
+        mWhenWorkToggleBtn.setOnCheckedChangeListener(checkedListener);
+        mWhenShoppingToggleBtn.setOnCheckedChangeListener(checkedListener);
     }
 
     /**
