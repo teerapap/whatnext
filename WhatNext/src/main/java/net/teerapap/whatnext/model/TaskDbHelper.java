@@ -2,10 +2,14 @@ package net.teerapap.whatnext.model;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.provider.BaseColumns;
 import android.util.Log;
+
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * The SQLite database helper for Task database.
@@ -69,6 +73,60 @@ public class TaskDbHelper extends SQLiteOpenHelper {
         Log.v(TAG, "Task id(" + newRowId + ") is added.");
     }
 
+    /**
+     * @return all the ongoing tasks. normal tasks.
+     */
+    public List<Task> listOngoingTasks() {
+        Log.v(TAG, "List all ongoing tasks.");
+        // Get the db in read mode
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        // Select these columns
+        String[] projection = {
+                TaskEntry._ID,
+                TaskEntry.COLUMN_NAME_TITLE,
+                TaskEntry.COLUMN_NAME_WHEN_HOME,
+                TaskEntry.COLUMN_NAME_WHEN_FREE,
+                TaskEntry.COLUMN_NAME_WHEN_WORK,
+                TaskEntry.COLUMN_NAME_WHEN_SHOPPING
+        };
+        // Where the task is normal
+        String where = TaskEntry.COLUMN_NAME_STATUS + "=?";
+        String[] selectArgs = new String[]{String.valueOf(TaskEntry.STATUS.NORMAL.val())};
+
+        // Query
+        Cursor c = db.query(TaskEntry.TABLE_NAME, projection, where, selectArgs, null, null, null);
+
+        // Iterate to create task objects.
+        LinkedList<Task> listTasks = new LinkedList<Task>();
+        c.moveToFirst();
+        while (!c.isAfterLast()) {
+            // Title
+            String title = c.getString(c.getColumnIndexOrThrow(TaskEntry.COLUMN_NAME_TITLE));
+
+            // When condition
+            WhenCondition con = new WhenCondition();
+            con.atHome(c.getShort(c.getColumnIndexOrThrow(TaskEntry.COLUMN_NAME_WHEN_HOME)) > 0);
+            con.freeTime(c.getShort(c.getColumnIndexOrThrow(TaskEntry.COLUMN_NAME_WHEN_FREE)) > 0);
+            con.atWork(c.getShort(c.getColumnIndexOrThrow(TaskEntry.COLUMN_NAME_WHEN_WORK)) > 0);
+            con.shopping(c.getShort(c.getColumnIndexOrThrow(TaskEntry.COLUMN_NAME_WHEN_SHOPPING)) > 0);
+
+            // Task
+            Task t = new Task(title, con);
+            t.setId(c.getLong(c.getColumnIndexOrThrow(TaskEntry._ID)));
+
+            listTasks.add(t);
+
+            // Move to next row
+            c.moveToNext();
+        }
+
+        // TODO: Change log level to info
+        Log.v(TAG, "Found " + listTasks.size() + " ongoing tasks.");
+
+        return listTasks;
+    }
+
     /* Inner class that defines the table contents */
     public static abstract class TaskEntry implements BaseColumns {
         public static final String TABLE_NAME = "tasks";
@@ -80,8 +138,18 @@ public class TaskDbHelper extends SQLiteOpenHelper {
         public static final String COLUMN_NAME_STATUS = "status";
 
         public static enum STATUS {
-            NORMAL,
-            DONE
+            NORMAL(0),
+            DONE(1);
+
+            private final int val;
+
+            private STATUS(int v) {
+                this.val = v;
+            }
+
+            public int val() {
+                return this.val;
+            }
         }
 
         private static final String SQL_CREATE_TABLE =
