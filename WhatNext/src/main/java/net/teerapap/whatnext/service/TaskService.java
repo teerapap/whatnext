@@ -2,23 +2,23 @@ package net.teerapap.whatnext.service;
 
 import android.content.Context;
 import android.os.AsyncTask;
-import static android.os.AsyncTask.SERIAL_EXECUTOR;
 import android.util.Log;
 
 import net.teerapap.whatnext.model.Task;
 import net.teerapap.whatnext.model.TaskDbHelper;
 import net.teerapap.whatnext.model.When;
+import net.teerapap.whatnext.model.WhenCondition;
 
-import java.util.LinkedList;
 import java.util.List;
-import java.util.concurrent.Executor;
+
+import static android.os.AsyncTask.SERIAL_EXECUTOR;
 
 /**
  * Main task service which is responsible for getting next task
  * and adding new tasks.
- *
+ * <p/>
  * Most of methods in this class must be called in UI thread.
- *
+ * <p/>
  * Created by teerapap on 10/26/13.
  */
 public class TaskService {
@@ -48,38 +48,53 @@ public class TaskService {
      * Reload ongoing tasks to database. Called once only on initialization.
      */
     private void reloadOngoingTasks() {
-        new AsyncTask<Void, Void, List<Task>>() {
+        new AsyncTask<Void, Void, Void>() {
 
             @Override
-            protected List<Task> doInBackground(Void... params) {
-                return mTaskDbHelper.listOngoingTasks();
-            }
-
-            @Override
-            protected void onPostExecute(List<Task> tasks) {
-                for(Task t : tasks) {
+            protected Void doInBackground(Void... params) {
+                List<Task> tasks = mTaskDbHelper.listOngoingTasks();
+                for (Task t : tasks) {
                     mTaskScheduler.addTask(t);
                 }
-
+                return null;
             }
+
         }.executeOnExecutor(SERIAL_EXECUTOR, null);
     }
 
-    public void setNextTaskListener(NextTaskListener listener) {
-        mTaskScheduler.setNextTaskListener(listener);
+    public void setTaskSchedulingListener(TaskSchedulingListener listener) {
+        mTaskScheduler.setTaskSchedulingListener(listener);
+    }
+
+    /**
+     * Reschedule tasks based on new condition.
+     *
+     * @param when
+     */
+    public void rescheduleTasks(WhenCondition when) {
+        new AsyncTask<When, Void, Void>() {
+            @Override
+            protected Void doInBackground(When... params) {
+                mTaskScheduler.reschedule(params[0]);
+                return null;
+            }
+        }.executeOnExecutor(SERIAL_EXECUTOR, when);
     }
 
     /**
      * Asynchronously find next task suitable for when condition. Must be called in UI thread.
-     * When it finishes its operation, it will call an appropriate method of {@link net.teerapap.whatnext.service.NextTaskListener}.
+     * When it finishes its operation, it will call an appropriate method of {@link TaskSchedulingListener}
+     * (not guarantee to call on UI thread).
      */
     public void requestNextTask() {
         new AsyncTask<Void, Void, Void>() {
+
             @Override
             protected Void doInBackground(Void... params) {
                 mTaskScheduler.requestNextTask();
                 return null;
             }
+
         }.executeOnExecutor(SERIAL_EXECUTOR, null);
     }
 
@@ -98,6 +113,7 @@ public class TaskService {
                     try {
                         // Add task
                         mTaskDbHelper.addTask(t);
+                        mTaskScheduler.addTask(t);
 
                         // TODO: Print info log here.
 

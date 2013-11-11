@@ -48,6 +48,7 @@ public class WhenConditionViewGroup {
 
     /**
      * Register a callback to be invoked when the condition changed.
+     *
      * @param listener
      */
     public void onConditionChanged(final OnConditionChangeListener listener) {

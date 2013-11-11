@@ -14,14 +14,14 @@ import android.widget.Toast;
 import net.teerapap.whatnext.R;
 import net.teerapap.whatnext.model.Task;
 import net.teerapap.whatnext.model.WhenCondition;
-import net.teerapap.whatnext.service.NextTaskListener;
+import net.teerapap.whatnext.service.TaskSchedulingListener;
 import net.teerapap.whatnext.service.TaskService;
 
 /**
  * Fragment for WhatNext page. It is the main fragment for the application.
  * Created by teerapap on 10/21/13.
  */
-public class WhatNextFragment extends Fragment implements NextTaskListener {
+public class WhatNextFragment extends Fragment implements TaskSchedulingListener {
 
     private static String TAG = "WhatNextFragment";
 
@@ -46,10 +46,8 @@ public class WhatNextFragment extends Fragment implements NextTaskListener {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        // Initialize TaskService
-        mTaskService = TaskService.getInstance(getActivity().getApplicationContext());
-
         initMemberViews();
+        initTaskService();
         setUpEventListeners();
     }
 
@@ -72,12 +70,20 @@ public class WhatNextFragment extends Fragment implements NextTaskListener {
     }
 
     /**
+     * Initialize {@link net.teerapap.whatnext.service.TaskService}
+     */
+    private void initTaskService() {
+        // Initialize TaskService
+        mTaskService = TaskService.getInstance(getActivity().getApplicationContext());
+
+        // Subscribe for next task
+        mTaskService.setTaskSchedulingListener(this);
+    }
+
+    /**
      * Setup proper event listeners inside fragment
      */
     private void setUpEventListeners() {
-        // Subscribe for next task
-        mTaskService.setNextTaskListener(this);
-
         mClearBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -90,34 +96,51 @@ public class WhatNextFragment extends Fragment implements NextTaskListener {
                 nextTask();
             }
         });
+
+        mWhenCondViewGroup.onConditionChanged(new WhenConditionViewGroup.OnConditionChangeListener() {
+            @Override
+            public void onConditionChanged(WhenCondition currentCondition) {
+                mTaskService.rescheduleTasks(currentCondition);
+            }
+        });
     }
 
-
     private void nextTask() {
-        // Construct when condition
-        WhenCondition when = mWhenCondViewGroup.getCondition();
-
         // Request for next task
-        mTaskService.requestNextTask(when);
+        mTaskService.requestNextTask();
     }
 
     @Override
-    public void onNextTask(Task task) {
-        // TODO: Do on UI thread.
-        mTaskTitleText.setText(task.getTitle());
+    public void onTaskScheduled(final Task task) {
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                mTaskTitleText.setText(task.getTitle());
+            }
+        });
     }
 
     @Override
     public void onError(Error error) {
         Log.e(TAG, "Error on next task", error);
-        Toast.makeText(getActivity().getApplicationContext(), "Error occurred", Toast.LENGTH_SHORT)
-             .show();
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(getActivity().getApplicationContext(), "Error occurred", Toast.LENGTH_SHORT)
+                     .show();
+            }
+        });
     }
 
     @Override
-    public void onNoMoreTask() {
-        // TODO: Implement this properly and do on UI thread.
-        Toast.makeText(getActivity().getApplicationContext(), "No more task.", Toast.LENGTH_SHORT)
-             .show();
+    public void onNoTask() {
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                // TODO: Implement this properly, turn off done and action button.
+                Toast.makeText(getActivity().getApplicationContext(), "Hooray! No tasks left.", Toast.LENGTH_SHORT)
+                     .show();
+            }
+        });
     }
 }
