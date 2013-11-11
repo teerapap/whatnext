@@ -63,6 +63,7 @@ public class TaskDbHelper extends SQLiteOpenHelper {
         values.put(TaskEntry.COLUMN_NAME_WHEN_FREE, task.isFreeTime());
         values.put(TaskEntry.COLUMN_NAME_WHEN_WORK, task.isAtWork());
         values.put(TaskEntry.COLUMN_NAME_WHEN_SHOPPING, task.isShopping());
+        values.put(TaskEntry.COLUMN_NAME_STATUS, TaskEntry.STATUS.NORMAL.val());
 
         // Insert the new row, returning the primary key value of the new row
         long newRowId = db.insertOrThrow(TaskEntry.TABLE_NAME, null, values);
@@ -156,11 +157,11 @@ public class TaskDbHelper extends SQLiteOpenHelper {
                 "CREATE TABLE " + TABLE_NAME + " (" +
                         _ID + " INTEGER PRIMARY KEY" +
                         COMMA_SEP + COLUMN_NAME_TITLE + " TEXT" +
-                        COMMA_SEP + COLUMN_NAME_STATUS + " INTEGER" +
-                        COMMA_SEP + COLUMN_NAME_WHEN_HOME + " INTEGER" +
-                        COMMA_SEP + COLUMN_NAME_WHEN_WORK + " INTEGER" +
-                        COMMA_SEP + COLUMN_NAME_WHEN_FREE + " INTEGER" +
-                        COMMA_SEP + COLUMN_NAME_WHEN_SHOPPING + " INTEGER" +
+                        COMMA_SEP + COLUMN_NAME_STATUS + " INTEGER DEFAULT " + STATUS.NORMAL.val() +
+                        COMMA_SEP + COLUMN_NAME_WHEN_HOME + " INTEGER DEFAULT 0" +
+                        COMMA_SEP + COLUMN_NAME_WHEN_WORK + " INTEGER DEFAULT 0" +
+                        COMMA_SEP + COLUMN_NAME_WHEN_FREE + " INTEGER DEFAULT 0" +
+                        COMMA_SEP + COLUMN_NAME_WHEN_SHOPPING + " INTEGER DEFAULT 0" +
                         " )";
     }
 
