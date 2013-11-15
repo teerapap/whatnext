@@ -132,8 +132,8 @@ public class TaskDbHelper extends SQLiteOpenHelper {
 
     public AbstractMap.SimpleImmutableEntry<Task, Date> getLastDoneTaskAndTime() {
         // TODO: Read from database
-        Task t = new Task("Hello", new WhenCondition());
-        Date d = new Date();
+        Task t = new Task("Play games", new WhenCondition());
+        Date d = new Date(new Date().getTime() - 1000L * 60 * 60 * 24 * 30 * 5L);
         return new AbstractMap.SimpleImmutableEntry<Task, Date>(t, d);
     }
 

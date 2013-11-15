@@ -17,6 +17,8 @@ import net.teerapap.whatnext.model.WhenCondition;
 import net.teerapap.whatnext.service.TaskSchedulingListener;
 import net.teerapap.whatnext.service.TaskService;
 
+import org.ocpsoft.prettytime.PrettyTime;
+
 import java.util.Date;
 
 /**
@@ -159,12 +161,11 @@ public class WhatNextFragment extends Fragment implements TaskSchedulingListener
 
     @Override
     public void onTaskDone(final Task t, Date doneTime) {
-        // TODO: Calculate the real period
-        final String period = doneTime.toString();
+        final String period = new PrettyTime(new Date()).format(doneTime);
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                mLastDoneTaskTime.setText(period + " >>");
+                mLastDoneTaskTime.setText(period + " | ");
                 mLastDoneTaskText.setText(t.getTitle());
             }
         });
