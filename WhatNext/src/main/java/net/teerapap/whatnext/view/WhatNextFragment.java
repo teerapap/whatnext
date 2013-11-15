@@ -51,15 +51,15 @@ public class WhatNextFragment extends Fragment implements TaskSchedulingListener
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
         initMemberViews();
         initTaskService();
         setUpEventListeners();
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
+    public void onStart() {
+        super.onStart();
+
         mTaskService.requestLastDoneTask(this);
         mTaskService.requestCurrentScheduledTask(this);
     }
@@ -126,11 +126,12 @@ public class WhatNextFragment extends Fragment implements TaskSchedulingListener
     }
 
     @Override
-    public void onTaskScheduled(final Task task) {
+    public void onTaskScheduled(Task task) {
+        final String title = (task != null) ? task.getTitle() : getString(R.string.no_task);
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                mTaskTitleText.setText(task.getTitle());
+                mTaskTitleText.setText(title);
             }
         });
     }
@@ -153,6 +154,7 @@ public class WhatNextFragment extends Fragment implements TaskSchedulingListener
             @Override
             public void run() {
                 // TODO: Implement this properly, turn off done and action button.
+                mTaskTitleText.setText(getString(R.string.no_task));
                 Toast.makeText(getActivity().getApplicationContext(), "Hooray! No tasks left.", Toast.LENGTH_SHORT)
                      .show();
             }

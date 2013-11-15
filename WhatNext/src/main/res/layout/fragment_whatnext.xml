@@ -13,7 +13,6 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Read Born to Run"
         android:id="@+id/task_title"
         android:gravity="center"
         android:layout_weight="4"/>
@@ -26,7 +25,6 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:text="2 days ago >>"
             android:paddingLeft="5dp"
             android:paddingRight="5dp"
             android:textAppearance="?android:attr/textAppearanceSmall"
@@ -37,7 +35,6 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text="Buy a milk"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:id="@+id/last_done_task_title"
             android:gravity="center_vertical"/>
