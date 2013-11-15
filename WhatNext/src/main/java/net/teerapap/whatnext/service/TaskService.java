@@ -9,6 +9,8 @@ import net.teerapap.whatnext.model.TaskDbHelper;
 import net.teerapap.whatnext.model.When;
 import net.teerapap.whatnext.model.WhenCondition;
 
+import java.util.AbstractMap;
+import java.util.Date;
 import java.util.List;
 
 import static android.os.AsyncTask.SERIAL_EXECUTOR;
@@ -29,7 +31,6 @@ public class TaskService {
 
     private TaskDbHelper mTaskDbHelper;
     private TaskScheduler mTaskScheduler;
-
 
     private TaskService(Context context) {
         mTaskDbHelper = new TaskDbHelper(context);
@@ -131,4 +132,37 @@ public class TaskService {
         }.executeOnExecutor(SERIAL_EXECUTOR, task);
     }
 
+    public void requestLastDoneTask(TaskDoneCallback c) {
+        new AsyncTask<TaskDoneCallback, Void, Void>() {
+
+            @Override
+            protected Void doInBackground(TaskDoneCallback... callbacks) {
+                AbstractMap.SimpleImmutableEntry<Task, Date> o = mTaskDbHelper.getLastDoneTaskAndTime();
+                for (TaskDoneCallback c : callbacks) {
+                    c.onTaskDone(o.getKey(), o.getValue());
+                }
+                return null;
+            }
+        }.executeOnExecutor(SERIAL_EXECUTOR, c);
+    }
+
+    public void requestCurrentScheduledTask(TaskSchedulingListener listener) {
+        new AsyncTask<TaskSchedulingListener, Void, Void>() {
+
+            @Override
+            protected Void doInBackground(TaskSchedulingListener... listeners) {
+                Task t = mTaskScheduler.getCurrentTask();
+                for (TaskSchedulingListener l : listeners) {
+                    l.onTaskScheduled(t);
+                }
+                return null;
+            }
+        }.executeOnExecutor(SERIAL_EXECUTOR, listener);
+    }
+
+    public static interface TaskDoneCallback {
+
+        void onTaskDone(Task t, Date doneTime);
+
+    }
 }

@@ -17,11 +17,13 @@ import net.teerapap.whatnext.model.WhenCondition;
 import net.teerapap.whatnext.service.TaskSchedulingListener;
 import net.teerapap.whatnext.service.TaskService;
 
+import java.util.Date;
+
 /**
  * Fragment for WhatNext page. It is the main fragment for the application.
  * Created by teerapap on 10/21/13.
  */
-public class WhatNextFragment extends Fragment implements TaskSchedulingListener {
+public class WhatNextFragment extends Fragment implements TaskSchedulingListener, TaskService.TaskDoneCallback {
 
     private static String TAG = "WhatNextFragment";
 
@@ -29,6 +31,8 @@ public class WhatNextFragment extends Fragment implements TaskSchedulingListener
     private Button mNextTaskBtn;
     private TextView mTaskTitleText;
     private WhenConditionViewGroup mWhenCondViewGroup;
+    private TextView mLastDoneTaskText;
+    private TextView mLastDoneTaskTime;
 
     private TaskService mTaskService;
 
@@ -52,6 +56,13 @@ public class WhatNextFragment extends Fragment implements TaskSchedulingListener
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        mTaskService.requestLastDoneTask(this);
+        mTaskService.requestCurrentScheduledTask(this);
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_whatnext, container, false);
@@ -67,6 +78,8 @@ public class WhatNextFragment extends Fragment implements TaskSchedulingListener
         mTaskTitleText = (TextView) activity.findViewById(R.id.task_title);
         mWhenCondViewGroup = new WhenConditionViewGroup(activity);
         mClearBtn = (Button) activity.findViewById(R.id.clear_btn);
+        mLastDoneTaskText = (TextView) activity.findViewById(R.id.last_done_task_title);
+        mLastDoneTaskTime = (TextView) activity.findViewById(R.id.last_done_time);
     }
 
     /**
@@ -140,6 +153,19 @@ public class WhatNextFragment extends Fragment implements TaskSchedulingListener
                 // TODO: Implement this properly, turn off done and action button.
                 Toast.makeText(getActivity().getApplicationContext(), "Hooray! No tasks left.", Toast.LENGTH_SHORT)
                      .show();
+            }
+        });
+    }
+
+    @Override
+    public void onTaskDone(final Task t, Date doneTime) {
+        // TODO: Calculate the real period
+        final String period = doneTime.toString();
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                mLastDoneTaskTime.setText(period + " >>");
+                mLastDoneTaskText.setText(t.getTitle());
             }
         });
     }

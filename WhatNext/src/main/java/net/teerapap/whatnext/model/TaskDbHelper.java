@@ -8,6 +8,8 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.provider.BaseColumns;
 import android.util.Log;
 
+import java.util.AbstractMap;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -126,6 +128,13 @@ public class TaskDbHelper extends SQLiteOpenHelper {
         Log.v(TAG, "Found " + listTasks.size() + " ongoing tasks.");
 
         return listTasks;
+    }
+
+    public AbstractMap.SimpleImmutableEntry<Task, Date> getLastDoneTaskAndTime() {
+        // TODO: Read from database
+        Task t = new Task("Hello", new WhenCondition());
+        Date d = new Date();
+        return new AbstractMap.SimpleImmutableEntry<Task, Date>(t, d);
     }
 
     /* Inner class that defines the table contents */
