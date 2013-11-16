@@ -19,8 +19,6 @@ public interface TaskScheduler {
 
     /**
      * Request next task to be scheduled.
-     *
-     * @return next scheduled task. Null means no task.
      */
     void requestNextTask();
 

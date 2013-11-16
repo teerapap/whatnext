@@ -138,8 +138,10 @@ public class TaskService {
             @Override
             protected Void doInBackground(TaskDoneCallback... callbacks) {
                 AbstractMap.SimpleImmutableEntry<Task, Date> o = mTaskDbHelper.getLastDoneTaskAndTime();
-                for (TaskDoneCallback c : callbacks) {
-                    c.onTaskDone(o.getKey(), o.getValue());
+                if (o != null) {
+                    for (TaskDoneCallback c : callbacks) {
+                        c.onTaskDone(o.getKey(), o.getValue());
+                    }
                 }
                 return null;
             }
@@ -158,6 +160,25 @@ public class TaskService {
                 return null;
             }
         }.executeOnExecutor(SERIAL_EXECUTOR, listener);
+    }
+
+    public void markCurrentTaskDone(TaskDoneCallback taskDoneCallback) {
+        new AsyncTask<TaskDoneCallback, Void, Void>() {
+
+            @Override
+            protected Void doInBackground(TaskDoneCallback... callbacks) {
+                Task t = mTaskScheduler.getCurrentTask();
+                mTaskScheduler.requestNextTask();
+                if (t == null) return null;
+
+                Date dt = mTaskDbHelper.markTaskDone(t);
+                mTaskScheduler.removeTask(t);
+                for (TaskDoneCallback c : callbacks) {
+                    c.onTaskDone(t, dt);
+                }
+                return null;
+            }
+        }.executeOnExecutor(SERIAL_EXECUTOR, taskDoneCallback);
     }
 
     public static interface TaskDoneCallback {
