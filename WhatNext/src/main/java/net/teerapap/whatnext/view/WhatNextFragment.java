@@ -24,8 +24,6 @@ import net.teerapap.whatnext.model.WhenCondition;
 import net.teerapap.whatnext.service.TaskSchedulingListener;
 import net.teerapap.whatnext.service.TaskService;
 
-import org.ocpsoft.prettytime.PrettyTime;
-
 import java.util.Date;
 
 /**
@@ -134,6 +132,7 @@ public class WhatNextFragment extends Fragment implements TaskSchedulingListener
 
     /**
      * Setup proper event listeners inside fragment
+     *
      * @param register register if true. unregister if false.
      */
     private void setUpEventListeners(boolean register) {

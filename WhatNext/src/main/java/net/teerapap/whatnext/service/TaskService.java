@@ -4,7 +4,6 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import net.teerapap.whatnext.model.DoneTasksLoader;
 import net.teerapap.whatnext.model.Task;
 import net.teerapap.whatnext.model.TaskDbHelper;
 import net.teerapap.whatnext.model.When;

@@ -148,8 +148,9 @@ public class TaskDbHelper extends SQLiteOpenHelper {
 
     /**
      * Get cursor of done tasks
+     *
      * @param offset the offset index. If < 0, it means start at the first row.
-     * @param num the number of rows to query. If < 0 it means all available rows.
+     * @param num    the number of rows to query. If < 0 it means all available rows.
      * @return
      */
     public Cursor getDoneTasksCursor(int offset, int num) {
@@ -170,7 +171,7 @@ public class TaskDbHelper extends SQLiteOpenHelper {
         String where = TaskEntry.COLUMN_NAME_STATUS + "=?";
         String[] selectArgs = new String[]{String.valueOf(TaskEntry.STATUS.DONE.val())};
         String orderedBy = TaskEntry.COLUMN_NAME_DONE_TIME + " DESC";
-        String limit = ((offset >= 0)? offset:0) + "," + ((num >= 0)? num:MAX_LIMIT_NUM);
+        String limit = ((offset >= 0) ? offset : 0) + "," + ((num >= 0) ? num : MAX_LIMIT_NUM);
 
         // Query
         return db.query(TaskEntry.TABLE_NAME, projection, where, selectArgs, null, null, orderedBy, limit);
