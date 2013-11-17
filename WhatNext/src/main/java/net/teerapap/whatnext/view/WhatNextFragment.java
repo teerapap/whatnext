@@ -7,6 +7,7 @@ import android.app.DialogFragment;
 import android.app.Fragment;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -266,7 +267,16 @@ public class WhatNextFragment extends Fragment implements TaskSchedulingListener
 
     @Override
     public void onTaskDone(final Task t, Date doneTime) {
-        final String period = new PrettyTime(new Date()).format(doneTime);
+        // Convert to relative human-readable time
+        final CharSequence period;
+        long doneMillis = doneTime.getTime();
+        long currentMillis = System.currentTimeMillis();
+        if (currentMillis - doneMillis < DateUtils.SECOND_IN_MILLIS) {
+            // To avoid sub-second period
+            period = "just now";
+        } else {
+            period = DateUtils.getRelativeTimeSpanString(doneMillis, currentMillis, DateUtils.SECOND_IN_MILLIS, DateUtils.FORMAT_ABBREV_RELATIVE);
+        }
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {

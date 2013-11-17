@@ -14,6 +14,7 @@ import java.util.AbstractMap;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.TimeZone;
 
 /**
  * The SQLite database helper for Task database.
@@ -33,7 +34,12 @@ public class TaskDbHelper extends SQLiteOpenHelper {
     private static final String COMMA_SEP = ",";
     private static final String MAX_LIMIT_NUM = "10000";
 
-    public static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    public static final SimpleDateFormat UTC_DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+    static {
+        // Save to database in UTC timezone.
+        UTC_DATE_FORMAT.setTimeZone(TimeZone.getTimeZone("UTC"));
+    }
 
     public TaskDbHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -203,7 +209,7 @@ public class TaskDbHelper extends SQLiteOpenHelper {
 
             String doneDateStr = c.getString(c.getColumnIndexOrThrow(TaskEntry.COLUMN_NAME_DONE_TIME));
             try {
-                doneDate = DATE_FORMAT.parse(doneDateStr);
+                doneDate = UTC_DATE_FORMAT.parse(doneDateStr);
             } catch (ParseException pe) {
                 Log.e(TAG, "Cannot parse done time of task(" + task.getId() + "). Use epoch instead.", pe);
                 doneDate = new Date(0);
@@ -230,7 +236,7 @@ public class TaskDbHelper extends SQLiteOpenHelper {
         ContentValues values = new ContentValues();
         Date doneDate = new Date();
         values.put(TaskEntry.COLUMN_NAME_STATUS, TaskEntry.STATUS.DONE.val());
-        values.put(TaskEntry.COLUMN_NAME_DONE_TIME, DATE_FORMAT.format(doneDate));
+        values.put(TaskEntry.COLUMN_NAME_DONE_TIME, UTC_DATE_FORMAT.format(doneDate));
 
         // Which row to update, based on the ID
         String selection = TaskEntry._ID + " = ?";
