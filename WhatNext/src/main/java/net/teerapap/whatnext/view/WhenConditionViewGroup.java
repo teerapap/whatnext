@@ -51,13 +51,16 @@ public class WhenConditionViewGroup {
      *
      * @param listener
      */
-    public void onConditionChanged(final OnConditionChangeListener listener) {
-        CompoundButton.OnCheckedChangeListener checkedListener = new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                listener.onConditionChanged(getCondition());
-            }
-        };
+    public void setOnConditionChanged(final OnConditionChangeListener listener) {
+        CompoundButton.OnCheckedChangeListener checkedListener = null;
+        if (listener != null) {
+            checkedListener = new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    listener.onConditionChanged(getCondition());
+                }
+            };
+        }
 
         mWhenHomeToggleBtn.setOnCheckedChangeListener(checkedListener);
         mWhenFreeToggleBtn.setOnCheckedChangeListener(checkedListener);

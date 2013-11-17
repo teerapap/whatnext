@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import net.teerapap.whatnext.model.DoneTasksLoader;
 import net.teerapap.whatnext.model.Task;
 import net.teerapap.whatnext.model.TaskDbHelper;
 import net.teerapap.whatnext.model.When;
@@ -31,6 +32,7 @@ public class TaskService {
 
     private TaskDbHelper mTaskDbHelper;
     private TaskScheduler mTaskScheduler;
+    private TaskDoneCallback mTaskDoneCallback;
 
     private TaskService(Context context) {
         mTaskDbHelper = new TaskDbHelper(context);
@@ -174,12 +176,14 @@ public class TaskService {
             protected Void doInBackground(TaskDoneCallback... callbacks) {
                 Date dt = mTaskDbHelper.markTaskDone(task);
                 for (TaskDoneCallback c : callbacks) {
-                    c.onTaskDone(task, dt);
+                    if (c != null) {
+                        c.onTaskDone(task, dt);
+                    }
                 }
                 mTaskScheduler.removeTask(task);
                 return null;
             }
-        }.executeOnExecutor(SERIAL_EXECUTOR, taskDoneCallback);
+        }.executeOnExecutor(SERIAL_EXECUTOR, taskDoneCallback, mTaskDoneCallback);
     }
 
     public void deleteTask(final Task task, TaskDeletedCallback taskDeletedCallback) {
@@ -201,6 +205,10 @@ public class TaskService {
             }
 
         }.executeOnExecutor(SERIAL_EXECUTOR, taskDeletedCallback);
+    }
+
+    public void setTaskDoneListener(TaskDoneCallback taskDoneCallback) {
+        mTaskDoneCallback = taskDoneCallback;
     }
 
     public static interface TaskDoneCallback {

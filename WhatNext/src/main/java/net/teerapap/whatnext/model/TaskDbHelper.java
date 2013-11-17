@@ -31,6 +31,7 @@ public class TaskDbHelper extends SQLiteOpenHelper {
     public static final int DATABASE_VERSION = 1;
     public static final String DATABASE_NAME = "Tasks.db";
     private static final String COMMA_SEP = ",";
+    private static final String MAX_LIMIT_NUM = "10000";
 
     public static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
@@ -140,10 +141,12 @@ public class TaskDbHelper extends SQLiteOpenHelper {
     }
 
     /**
-     * @return a pair of the last done task and its done datetime.
+     * Get cursor of done tasks
+     * @param offset the offset index. If < 0, it means start at the first row.
+     * @param num the number of rows to query. If < 0 it means all available rows.
+     * @return
      */
-    public AbstractMap.SimpleImmutableEntry<Task, Date> getLastDoneTaskAndTime() {
-        Log.v(TAG, "Get last done task and date time.");
+    public Cursor getDoneTasksCursor(int offset, int num) {
         // Get the db in read mode
         SQLiteDatabase db = this.getReadableDatabase();
 
@@ -161,10 +164,19 @@ public class TaskDbHelper extends SQLiteOpenHelper {
         String where = TaskEntry.COLUMN_NAME_STATUS + "=?";
         String[] selectArgs = new String[]{String.valueOf(TaskEntry.STATUS.DONE.val())};
         String orderedBy = TaskEntry.COLUMN_NAME_DONE_TIME + " DESC";
-        String limit = "1";
+        String limit = ((offset >= 0)? offset:0) + "," + ((num >= 0)? num:MAX_LIMIT_NUM);
 
         // Query
-        Cursor c = db.query(TaskEntry.TABLE_NAME, projection, where, selectArgs, null, null, orderedBy, limit);
+        return db.query(TaskEntry.TABLE_NAME, projection, where, selectArgs, null, null, orderedBy, limit);
+    }
+
+    /**
+     * @return a pair of the last done task and its done datetime.
+     */
+    public AbstractMap.SimpleImmutableEntry<Task, Date> getLastDoneTaskAndTime() {
+        Log.v(TAG, "Get last done task and date time.");
+
+        Cursor c = this.getDoneTasksCursor(0, 1);
 
         // Iterate to create task objects.
         Task task = null;

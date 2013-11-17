@@ -70,15 +70,25 @@ public class WhatNextFragment extends Fragment implements TaskSchedulingListener
         super.onActivityCreated(savedInstanceState);
         initMemberViews();
         initTaskService();
-        setUpEventListeners();
     }
 
     @Override
     public void onStart() {
         super.onStart();
 
+        // Request data to show
         mTaskService.requestLastDoneTask(this);
         mTaskService.requestCurrentScheduledTask(this);
+        // Register all event listeners
+        setUpEventListeners(true);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+
+        // Unregister all event listeners
+        setUpEventListeners(false);
     }
 
     @Override
@@ -119,58 +129,68 @@ public class WhatNextFragment extends Fragment implements TaskSchedulingListener
     private void initTaskService() {
         // Initialize TaskService
         mTaskService = TaskService.getInstance(getActivity().getApplicationContext());
-
-        // Subscribe for next task
-        mTaskService.setTaskSchedulingListener(this);
     }
 
     /**
      * Setup proper event listeners inside fragment
+     * @param register register if true. unregister if false.
      */
-    private void setUpEventListeners() {
-        mClearBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mWhenCondViewGroup.resetToggleButtons();
-            }
-        });
-        mNextTaskBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                nextTask();
-            }
-        });
-        mDoneBtn.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                // Handle logic about long click.
-                if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                    mDoneBtnLongClickSuccess = false;
-                } else if (event.getAction() == MotionEvent.ACTION_UP) {
-                    if (!mDoneBtnLongClickSuccess) {
-                        // Show dialog
-                        Toast.makeText(getActivity().getApplicationContext(), "Press long to mark done.", Toast.LENGTH_SHORT)
-                             .show();
-                    }
-                }
-                return false;
-            }
-        });
-        mDoneBtn.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                markTaskDone();
-                mDoneBtnLongClickSuccess = true;
-                return true;
-            }
-        });
+    private void setUpEventListeners(boolean register) {
+        if (register) {
+            // Listen for next task scheduled
+            mTaskService.setTaskSchedulingListener(this);
 
-        mWhenCondViewGroup.onConditionChanged(new WhenConditionViewGroup.OnConditionChangeListener() {
-            @Override
-            public void onConditionChanged(WhenCondition currentCondition) {
-                mTaskService.rescheduleTasks(currentCondition);
-            }
-        });
+            mClearBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mWhenCondViewGroup.resetToggleButtons();
+                }
+            });
+            mNextTaskBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    nextTask();
+                }
+            });
+            mDoneBtn.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    // Handle logic about long click.
+                    if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                        mDoneBtnLongClickSuccess = false;
+                    } else if (event.getAction() == MotionEvent.ACTION_UP) {
+                        if (!mDoneBtnLongClickSuccess) {
+                            // Show dialog
+                            Toast.makeText(getActivity().getApplicationContext(), "Press long to mark done.", Toast.LENGTH_SHORT)
+                                 .show();
+                        }
+                    }
+                    return false;
+                }
+            });
+            mDoneBtn.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    markTaskDone();
+                    mDoneBtnLongClickSuccess = true;
+                    return true;
+                }
+            });
+
+            mWhenCondViewGroup.setOnConditionChanged(new WhenConditionViewGroup.OnConditionChangeListener() {
+                @Override
+                public void onConditionChanged(WhenCondition currentCondition) {
+                    mTaskService.rescheduleTasks(currentCondition);
+                }
+            });
+        } else {
+            mTaskService.setTaskSchedulingListener(null);
+            mClearBtn.setOnClickListener(null);
+            mNextTaskBtn.setOnClickListener(null);
+            mDoneBtn.setOnTouchListener(null);
+            mDoneBtn.setOnLongClickListener(null);
+            mWhenCondViewGroup.setOnConditionChanged(null);
+        }
     }
 
     private void nextTask() {
