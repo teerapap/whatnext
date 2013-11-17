@@ -76,7 +76,7 @@ public class SimpleTaskScheduler implements TaskScheduler {
             // Construct new priority queue based on new condition.
             Comparator<Task> comparator = getComparator();
             PriorityQueue<Task> t = mQ;
-            mQ = new PriorityQueue<Task>(t.size() + mNextQ.size(), comparator);
+            mQ = new PriorityQueue<Task>(t.size() + mNextQ.size() + 1, comparator);
             mQ.addAll(t);
             mQ.addAll(mNextQ);
             mNextQ.clear();
