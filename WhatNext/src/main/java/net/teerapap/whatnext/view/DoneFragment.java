@@ -2,7 +2,10 @@ package net.teerapap.whatnext.view;
 
 import android.app.ListFragment;
 import android.os.Bundle;
+import android.view.Menu;
 import android.widget.ArrayAdapter;
+
+import net.teerapap.whatnext.R;
 
 /**
  * Fragment for Done menu. It shows a list of done tasks.
@@ -24,6 +27,9 @@ public class DoneFragment extends ListFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        // This fragment has options menu
+        setHasOptionsMenu(true);
+
         // TODO: Read done list from database
         this.setListAdapter(new ArrayAdapter<String>(getActivity(),
                 android.R.layout.simple_list_item_1, new String[]{}));
@@ -34,5 +40,12 @@ public class DoneFragment extends ListFragment {
         super.onActivityCreated(savedInstanceState);
         // TODO: Show no items with icon
         this.setEmptyText("No items :)");
+    }
+
+    @Override
+    public void onPrepareOptionsMenu(Menu menu) {
+        super.onPrepareOptionsMenu(menu);
+        // Disable delete action for now.
+        menu.findItem(R.id.action_delete_task).setVisible(false);
     }
 }

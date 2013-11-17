@@ -182,9 +182,36 @@ public class TaskService {
         }.executeOnExecutor(SERIAL_EXECUTOR, taskDoneCallback);
     }
 
+    public void deleteTask(final Task task, TaskDeletedCallback taskDeletedCallback) {
+        if (task == null) {
+            mTaskScheduler.requestNextTask();
+            return;
+        }
+
+        new AsyncTask<TaskDeletedCallback, Void, Void>() {
+
+            @Override
+            protected Void doInBackground(TaskDeletedCallback... callbacks) {
+                mTaskDbHelper.deleteTask(task);
+                for (TaskDeletedCallback c : callbacks) {
+                    c.onTaskDeleted(task);
+                }
+                mTaskScheduler.removeTask(task);
+                return null;
+            }
+
+        }.executeOnExecutor(SERIAL_EXECUTOR, taskDeletedCallback);
+    }
+
     public static interface TaskDoneCallback {
 
         void onTaskDone(Task t, Date doneTime);
+
+    }
+
+    public static interface TaskDeletedCallback {
+
+        void onTaskDeleted(Task t);
 
     }
 }

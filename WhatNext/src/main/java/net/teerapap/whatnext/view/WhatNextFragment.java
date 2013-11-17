@@ -1,10 +1,15 @@
 package net.teerapap.whatnext.view;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.app.DialogFragment;
 import android.app.Fragment;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,7 +31,7 @@ import java.util.Date;
  * Fragment for WhatNext page. It is the main fragment for the application.
  * Created by teerapap on 10/21/13.
  */
-public class WhatNextFragment extends Fragment implements TaskSchedulingListener, TaskService.TaskDoneCallback {
+public class WhatNextFragment extends Fragment implements TaskSchedulingListener, TaskService.TaskDoneCallback, TaskService.TaskDeletedCallback {
 
     private static String TAG = "WhatNextFragment";
 
@@ -55,6 +60,12 @@ public class WhatNextFragment extends Fragment implements TaskSchedulingListener
     }
 
     @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
+
+    @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         initMemberViews();
@@ -75,6 +86,17 @@ public class WhatNextFragment extends Fragment implements TaskSchedulingListener
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_whatnext, container, false);
         return rootView;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action buttons
+        switch (item.getItemId()) {
+            case R.id.action_delete_task:
+                deleteCurrentTask();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     /**
@@ -160,6 +182,30 @@ public class WhatNextFragment extends Fragment implements TaskSchedulingListener
         mTaskService.markTaskDone(mCurrentTask, this);
     }
 
+    private void deleteCurrentTask() {
+        if (mCurrentTask == null) {
+            return;
+        }
+
+        DialogFragment confirmDialog = new DialogFragment() {
+            @Override
+            public Dialog onCreateDialog(Bundle savedInstanceState) {
+                // Build the dialog and set up the button click handlers
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                builder.setMessage(mCurrentTask.getTitle())
+                       .setTitle(R.string.delete_task_confirm_title)
+                       .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                           public void onClick(DialogInterface dialog, int id) {
+                               mTaskService.deleteTask(mCurrentTask, WhatNextFragment.this);
+                           }
+                       })
+                       .setNegativeButton(android.R.string.no, null);
+                return builder.create();
+            }
+        };
+        confirmDialog.show(getFragmentManager(), "confirm_delete");
+    }
+
     @Override
     public void onTaskScheduled(final Task task) {
         final String title = (task != null) ? task.getTitle() : getString(R.string.no_task);
@@ -206,6 +252,17 @@ public class WhatNextFragment extends Fragment implements TaskSchedulingListener
             public void run() {
                 mLastDoneTaskTime.setText(period + " | ");
                 mLastDoneTaskText.setText(t.getTitle());
+            }
+        });
+    }
+
+    @Override
+    public void onTaskDeleted(final Task t) {
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(getActivity().getApplicationContext(), "\"" + t.getTitle() + "\" deleted", Toast.LENGTH_SHORT)
+                     .show();
             }
         });
     }

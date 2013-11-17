@@ -3,6 +3,7 @@
 
     <string name="app_name">WhatNext</string>
     <string name="action_new_task">New Tasks</string>
+    <string name="action_delete_task">Delete</string>
     <string name="drawer_open">Open drawer</string>
     <string name="drawer_close">Close drawer</string>
     <string name="when_home">Home</string>
@@ -22,5 +23,6 @@
     <string name="task_title_label">Title</string>
     <string name="task_when_label">When</string>
     <string name="add_task_btn">Add task</string>
+    <string name="delete_task_confirm_title">Delete current task?</string>
 
 </resources>

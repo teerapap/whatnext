@@ -233,6 +233,21 @@ public class TaskDbHelper extends SQLiteOpenHelper {
         return doneDate;
     }
 
+    /**
+     * Delete a task from database
+     *
+     * @param task
+     */
+    public void deleteTask(Task task) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        // Which row to delete, based on the ID
+        String selection = TaskEntry._ID + " = ?";
+        String[] selectionArgs = {String.valueOf(task.getId())};
+
+        db.delete(TaskEntry.TABLE_NAME, selection, selectionArgs);
+    }
+
     /* Inner class that defines the table contents */
     public static abstract class TaskEntry implements BaseColumns {
         public static final String TABLE_NAME = "tasks";
