@@ -30,6 +30,8 @@ public class WhatNextFragment extends Fragment implements TaskSchedulingListener
 
     private static String TAG = "WhatNextFragment";
 
+    private Task mCurrentTask;
+
     private Button mClearBtn;
     private Button mNextTaskBtn;
     private Button mDoneBtn;
@@ -155,15 +157,16 @@ public class WhatNextFragment extends Fragment implements TaskSchedulingListener
     }
 
     private void markTaskDone() {
-        mTaskService.markCurrentTaskDone(this);
+        mTaskService.markTaskDone(mCurrentTask, this);
     }
 
     @Override
-    public void onTaskScheduled(Task task) {
+    public void onTaskScheduled(final Task task) {
         final String title = (task != null) ? task.getTitle() : getString(R.string.no_task);
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
+                mCurrentTask = task;
                 mTaskTitleText.setText(title);
             }
         });
@@ -187,6 +190,7 @@ public class WhatNextFragment extends Fragment implements TaskSchedulingListener
             @Override
             public void run() {
                 // TODO: Implement this properly, turn off done and action button.
+                mCurrentTask = null;
                 mTaskTitleText.setText(getString(R.string.no_task));
                 Toast.makeText(getActivity().getApplicationContext(), "Hooray! No tasks left.", Toast.LENGTH_SHORT)
                      .show();

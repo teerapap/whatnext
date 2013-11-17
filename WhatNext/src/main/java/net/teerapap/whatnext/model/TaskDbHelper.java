@@ -207,6 +207,7 @@ public class TaskDbHelper extends SQLiteOpenHelper {
 
     /**
      * Mark this task done in database
+     *
      * @param task the task to be marked done
      * @return the date when the task is marked as done
      */

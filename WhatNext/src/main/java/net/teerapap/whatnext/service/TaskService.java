@@ -162,20 +162,21 @@ public class TaskService {
         }.executeOnExecutor(SERIAL_EXECUTOR, listener);
     }
 
-    public void markCurrentTaskDone(TaskDoneCallback taskDoneCallback) {
+    public void markTaskDone(final Task task, TaskDoneCallback taskDoneCallback) {
+        if (task == null) {
+            mTaskScheduler.requestNextTask();
+            return;
+        }
+
         new AsyncTask<TaskDoneCallback, Void, Void>() {
 
             @Override
             protected Void doInBackground(TaskDoneCallback... callbacks) {
-                Task t = mTaskScheduler.getCurrentTask();
-                mTaskScheduler.requestNextTask();
-                if (t == null) return null;
-
-                Date dt = mTaskDbHelper.markTaskDone(t);
-                mTaskScheduler.removeTask(t);
+                Date dt = mTaskDbHelper.markTaskDone(task);
                 for (TaskDoneCallback c : callbacks) {
-                    c.onTaskDone(t, dt);
+                    c.onTaskDone(task, dt);
                 }
+                mTaskScheduler.removeTask(task);
                 return null;
             }
         }.executeOnExecutor(SERIAL_EXECUTOR, taskDoneCallback);
