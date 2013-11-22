@@ -127,6 +127,13 @@ public class SimpleTaskScheduler implements TaskScheduler {
         if (!mQ.remove(task)) { // if not in current queue
             mNextQ.remove(task);
         } else {
+            if (mQ.size() == 0) { // current queue is empty
+                // swap current queue with next queue.
+                PriorityQueue<Task> tmp = mQ;
+                mQ = mNextQ;
+                mNextQ = tmp;
+            }
+
             if (currentTask != getCurrentTask()) { // if current task changes
                 notifyAfterScheduled();
             }
